@@ -19,7 +19,7 @@ Gem::Specification.new do |s|
   s.require_paths = ['lib']
 
   s.add_runtime_dependency 'omniauth', '~> 1.2'
-  s.add_runtime_dependency 'omniauth-oauth2', '~> 1.1'
+  s.add_runtime_dependency 'omniauth-oauth2', '~> 1.0.2'
 
   s.add_development_dependency 'dotenv', '>= 2.0'
   s.add_development_dependency 'sinatra', '>= 2.0'
