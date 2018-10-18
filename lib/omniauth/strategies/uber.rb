@@ -31,11 +31,25 @@ module OmniAuth
         }
       end
 
+      def callback_url
+        # NOTE: This method is originally defined in OmniAuth::Strategy, which OmniAuth::Strategies::OAuth2 includes/inherits from.
+        # NOTE: When the callback_host option is not provided as an option, this will fallback to the orignal definition via super.
+        # NOTE: By default, Uber Omniauth will try and send the callback back to requester. This is a problem when the link on our marketing site is the requester, but the API needs to be the receiver. This allows us to retarget.
+        # NOTE: A callback_path should always be passed as an option, even if a callback_host is not.
+
+        callback_host = options[:callback_host]
+
+        if callback_host
+          callback_host + script_name + callback_path + query_string
+        else
+          # NOTE: super logic: full_host + script_name + callback_path + query_string
+          super
+        end
+      end
+
       def raw_info
         @raw_info ||= access_token.get('/v1/me').parsed || {}
       end
-
-      # NOTE/TODO: If we want to control the root and not just the path, we can redefine the callback_url() builder method here to pull from options and default to super.
 
       def request_phase
         options[:authorize_params] = {
